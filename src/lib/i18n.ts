@@ -95,6 +95,10 @@ export const translations = {
     floor: "Floor",
     zone: "Zone",
     qty: "Qty",
+    logout: "Logout",
+    logoutConfirmTitle: "Are you sure you want to log out?",
+    logoutConfirmDesc: "You will need to log back in to access your account.",
+    leave: "Leave",
   },
   ar: {
     appName: "المكتب الذكي",
@@ -181,6 +185,10 @@ export const translations = {
     floor: "الطابق",
     zone: "المنطقة",
     qty: "الكمية",
+    logout: "تسجيل خروج",
+    logoutConfirmTitle: "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    logoutConfirmDesc: "ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
+    leave: "مغادرة",
   },
 } as const;
 

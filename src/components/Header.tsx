@@ -6,6 +6,17 @@ import { Globe, ShoppingCart, Bell, Menu, Building2, LogOut } from "lucide-react
 import { Link, useLocation } from "@tanstack/react-router";
 import type { Role } from "@/lib/mock-data";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { navItems } from "./Sidebar";
 import { cn } from "@/lib/utils";
 
@@ -60,10 +71,28 @@ export function Header() {
                   })}
                 </nav>
                 <div className="p-4 border-t">
-                  <Button variant="outline" className="w-full justify-start text-destructive" onClick={logout}>
-                    <LogOut className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
-                    Logout
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start text-destructive">
+                        <LogOut className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
+                        {t("logout")}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>{t("logoutConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t("logoutConfirmDesc")}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction onClick={logout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                          {t("leave")}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </SheetContent>
@@ -109,14 +138,31 @@ export function Header() {
             {lang === "en" ? "AR" : "EN"}
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={logout}
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t("logoutConfirmTitle")}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t("logoutConfirmDesc")}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                <AlertDialogAction onClick={logout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {t("leave")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
