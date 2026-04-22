@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, CalendarDays, Stethoscope, Coffee } from "lucide-react";
+import { Plus, CalendarDays, Stethoscope, Coffee, Check, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/leave")({
 });
 
 function LeavePage() {
-  const { t, leaveBalance, leaveRequests, addLeaveRequest, currentUser } = useApp();
+  const { t, leaveBalance, leaveRequests, addLeaveRequest, currentUser, role, employees, updateLeaveRequestStatus } = useApp();
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<"annual" | "sick" | "casual">("annual");
   const [startDate, setStartDate] = useState("");
@@ -32,6 +32,17 @@ function LeavePage() {
   const [reason, setReason] = useState("");
 
   const myRequests = leaveRequests.filter((r) => r.employeeName === currentUser.name || r.employeeId === currentUser.id);
+
+  const teamRequests = leaveRequests.filter((r) => {
+    if (r.employeeId === currentUser.id) return false;
+    if (r.status !== "pending") return false;
+    if (role === "hr") return true;
+    if (role === "manager") {
+      const emp = employees.find((e) => e.id === r.employeeId);
+      return emp?.department === currentUser.department;
+    }
+    return false;
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,13 +147,44 @@ function LeavePage() {
                       : "bg-warning/10 text-warning border-warning/30"
                     }
                   >
-                    {r.status}
+                    {t(r.status as any)}
                   </Badge>
                 </div>
               ))}
             </div>
           )}
         </Card>
+
+        {(role === "manager" || role === "hr") && (
+          <Card className="p-6 shadow-card mt-6">
+            <h2 className="font-semibold mb-4">{t("teamRequests")}</h2>
+            {teamRequests.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">No pending team requests</p>
+            ) : (
+              <div className="space-y-3">
+                {teamRequests.map((r) => (
+                  <div key={r.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border gap-4">
+                    <div>
+                      <div className="font-medium">{r.employeeName}</div>
+                      <div className="text-sm mt-1 mb-2 capitalize">{t(r.type === "annual" ? "annualLeave" : r.type === "sick" ? "sickLeave" : "casualLeave")} ({r.startDate} → {r.endDate})</div>
+                      <div className="text-sm text-muted-foreground">{t("reason")}: {r.reason}</div>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <Button size="sm" variant="outline" className="text-success border-success/30 hover:bg-success/10" onClick={() => updateLeaveRequestStatus(r.id, "approved")}>
+                        <Check className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {t("approve")}
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/10" onClick={() => updateLeaveRequestStatus(r.id, "rejected")}>
+                        <X className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
+                        {t("reject")}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        )}
       </div>
     </AppLayout>
   );

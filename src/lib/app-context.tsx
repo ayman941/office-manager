@@ -57,6 +57,7 @@ interface AppContextValue {
   // Leave
   leaveRequests: LeaveRequest[];
   addLeaveRequest: (req: Omit<LeaveRequest, "id" | "status" | "employeeId" | "employeeName">) => void;
+  updateLeaveRequestStatus: (id: string, status: "approved" | "rejected") => void;
   leaveBalance: { annual: number; sick: number; casual: number };
 }
 
@@ -201,6 +202,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     ]);
   };
 
+  const updateLeaveRequestStatus: AppContextValue["updateLeaveRequestStatus"] = (id, status) => {
+    setLeaveRequests((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
+  };
+
   const leaveBalance = { annual: 18, sick: 10, casual: 5 };
 
   const value: AppContextValue = {
@@ -211,7 +216,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     menu, cart, addToCart, removeFromCart, updateQty, clearCart, cartTotal, cartCount,
     orders, placeOrder, updateOrderStatus, restockItem,
     employees, addEmployee,
-    leaveRequests, addLeaveRequest, leaveBalance,
+    leaveRequests, addLeaveRequest, updateLeaveRequestStatus, leaveBalance,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -99,6 +99,11 @@ export const translations = {
     logoutConfirmTitle: "Are you sure you want to log out?",
     logoutConfirmDesc: "You will need to log back in to access your account.",
     leave: "Leave",
+    teamRequests: "Team Requests",
+    approve: "Approve",
+    reject: "Reject",
+    approved: "Approved",
+    rejected: "Rejected",
   },
   ar: {
     appName: "المكتب الذكي",
@@ -189,6 +194,11 @@ export const translations = {
     logoutConfirmTitle: "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     logoutConfirmDesc: "ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
     leave: "مغادرة",
+    teamRequests: "طلبات الفريق",
+    approve: "موافقة",
+    reject: "رفض",
+    approved: "مقبول",
+    rejected: "مرفوض",
   },
 } as const;
 
